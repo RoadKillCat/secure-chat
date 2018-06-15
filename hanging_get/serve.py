@@ -8,8 +8,11 @@ fdata = 'data.json'
 findex = 'index.html'
 std_cols = ['#f00','#0f0','#00f']
 
-with open(fdata) as f:
-    data = json.loads(f.read())
+try:
+    with open(fdata) as f:
+        data = json.loads(f.read())
+except FileNotFoundError:
+    data = {'users': {}, 'messages': []}
 
 num_msgs = len(data['messages'])
 
@@ -75,9 +78,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 #saves the data to the json file
 def save_data(*args):
-    print('cleaning up')
+    print('\rclosing...\nsaving messges to {}...'.format(fdata))
     with open(fdata,'w') as f:
         f.write(json.dumps(data))
+
+    print('save successful')
     sys.exit()
 
 #handle any method of killing the server
