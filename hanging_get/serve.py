@@ -1,12 +1,15 @@
 import http.server
 import socketserver
-import random,json,hashlib,os,signal,sys
 import threading
+import random,json,hashlib,os,signal
+import requests
 
 PORT = 8000
+MY_IP = requests.get('http://ipinfo.io/ip').text.strip()
 fdata = 'data.json'
 findex = 'index.html'
 std_cols = ['#f00','#0f0','#00f']
+dead = False
 
 try:
     with open(fdata) as f:
@@ -38,7 +41,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             #compares the number of messages they have to the actual
             #enters infinite loop whilst there are no new messages
             tnm = int(self.headers['num_msgs'])
-            while tnm == num_msgs:
+            while tnm == num_msgs and not dead:
                 pass
             body = json.dumps(data).encode('utf-8')
             ctype = 'text/plain'
@@ -77,24 +80,26 @@ class Handler(http.server.BaseHTTPRequestHandler):
         return
 
 #saves the data to the json file
-def save_data(*args):
+def die(*args):
     print('\rclosing...\nsaving messges to {}...'.format(fdata))
     with open(fdata,'w') as f:
         f.write(json.dumps(data))
 
     print('save successful')
-    sys.exit()
 
 #handle any method of killing the server
-sigs = set(signal.Signals) - {signal.SIGKILL,signal.SIGSTOP}
-for s in sigs:
-    signal.signal(s, save_data)
+#sigs = set(signal.Signals) - {signal.SIGKILL,signal.SIGSTOP}
+#for s in sigs:
+#    signal.signal(s, save_data)
 
 #serve
-print('Serving at port', PORT)
+print('serving at: {}:{}'.format(MY_IP,PORT))
 
 socketserver.TCPServer.allow_reuse_address=1
 server = socketserver.ThreadingTCPServer(('',PORT), Handler)
-server.serve_forever()
-server.shutdown()
-server.server_close()
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    server.shutdown()
+    server.server_close()
+    die()
