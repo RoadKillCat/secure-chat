@@ -1,4 +1,4 @@
-import asyncio,websockets,json
+import asyncio,websockets,json,hashlib
 
 USERS = set() #set of WebSocketServerProtocol instances
 
@@ -9,6 +9,7 @@ DATA = {
     'posts': []   #list of posts as objects: {uid: content}
 }
 
+PASSKEY = '02edbb53017ded13c286e27d14285cb82f5a87f6dcbae280d6c53b5d98477bb7'
 
 def get_uid(websocket):
     'identifies the user'
@@ -61,7 +62,16 @@ async def send_uid(websocket):
     uid = get_uid(websocket)
     await websocket.send(json.dumps({'type':'whoami','data':uid}))
 
+async def authenticate(websocket):
+    guess = hashlib.sha256(await websocket.recv()).hexdigest()
+    success = guess == PASSKEY
+    await websockets.send(json.dumps({'type':'authenticate','data':success}))
+    return success
+
 async def handle_ws(websocket,path):
+    if not await authenticate(websocket):
+        websocket.close()
+        return
     uid = get_uid(websocket)
     await handle_join(websocket)
     await send_uid(websocket)
