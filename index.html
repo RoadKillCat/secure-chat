@@ -35,17 +35,18 @@ a {
 </style>
 <body>
 <h1>secure chat</h1>
-<hr>
 <div>
 Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
 <br>
 <div>
 <input id='name' class='details' type='text' placeholder='enter a display name'>
-<input id='col'  class='details' type='text' placeholder='enter a display colour'>
+<input id='color'  class='details' type='text' placeholder='enter a display colour'>
 <input id='details_but' value='submit' type='button'>
 <div id='demand'>you must enter your details before you can send messages</div>
 </div>
-<br>
+<hr>
+<h4>users</h4>
+<div id='users'></div>
 <hr>
 <div id='out'></div>
 <input id='entry' type='text'>
