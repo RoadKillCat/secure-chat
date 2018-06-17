@@ -3,11 +3,11 @@ import asyncio,websockets,json
 USERS = set() #set of WebSocketServerProtocol instances
 
 DATA = {
-        'users': {},     #dict of dicts: {uid: {name:   their chosen name,
-                         #                      online: is there a websocket open with their uid,
-                         #                      color:  their chosen colour}}
-        'posts': []   #list of posts as objects: {uid: content}
-        }
+    'users': {},  #dict of dicts: {uid: {name:   their chosen name,
+                  #                      online: is there a websocket open with their uid,
+                  #                      color:  their chosen colour}}
+    'posts': []   #list of posts as objects: {uid: content}
+}
 
 
 def get_uid(websocket):
@@ -65,6 +65,7 @@ async def handle_ws(websocket,path):
     uid = get_uid(websocket)
     await handle_join(websocket)
     await send_uid(websocket)
+    await websocket.send(message_posts_update())
     try:
         async for message in websocket:
             message = json.loads(message)
