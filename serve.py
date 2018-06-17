@@ -63,16 +63,21 @@ async def send_uid(websocket):
     await websocket.send(json.dumps({'type':'whoami','data':uid}))
 
 async def authenticate(websocket):
-    guess = hashlib.sha256(await websocket.recv()).hexdigest()
+    message = json.loads(await websocket.recv())
+    assert message['type'] == 'authenticate'
+    guess = hashlib.sha256(message['data'].encode('utf-8')).hexdigest()
     success = guess == PASSKEY
-    await websockets.send(json.dumps({'type':'authenticate','data':success}))
+    print(success)
+    await websocket.send(json.dumps({'type':'authenticate','data':success}))
     return success
 
 async def handle_ws(websocket,path):
-    if not await authenticate(websocket):
-        websocket.close()
-        return
     uid = get_uid(websocket)
+    print(uid,'connected')
+    if not await authenticate(websocket):
+        await websocket.close()
+        return
+    print(uid,'autheticated')
     await handle_join(websocket)
     await send_uid(websocket)
     await websocket.send(message_posts_update())
