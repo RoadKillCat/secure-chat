@@ -4,6 +4,15 @@ body {
     background-color: #000;
     color: #fff;
 }
+.details {
+    background-color: #000;
+    color: #fff;
+    outline: none;
+}
+#details_but {
+    background-color: #000;
+    color: #fff;
+}
 #out {
     margin-bottom: 80px;
     border-left: 1px solid #fff;
@@ -16,11 +25,30 @@ body {
     margin: 8px;
     bottom: 0;
 }
+#demand {
+    color: red;
+    display: none;
+}
+a {
+    background-color: #888;
+}
 </style>
 <body>
 <h1>secure chat</h1>
-<input type='text' id='entry'></input>
+<hr>
+<div>
+Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
+<br>
+<div>
+<input id='name' class='details' type='text' placeholder='enter a display name'>
+<input id='col'  class='details' type='text' placeholder='enter a display colour'>
+<input id='details_but' value='submit' type='button'>
+<div id='demand'>you must enter your details before you can send messages</div>
+</div>
+<br>
+<hr>
 <div id='out'></div>
+<input id='entry' type='text'>
 <script src='script.js'></script>
 </body>
 </html>
