@@ -17,6 +17,10 @@ let post_ind = 0;
 
 let websocket = new WebSocket(ws_server);
 
+websocket.onerror = function(e){
+    out.innerHTML = 'server error: likely server script is not running';
+}
+
 websocket.onmessage = function(e){
     let message = JSON.parse(e.data);
     switch (message['type']){

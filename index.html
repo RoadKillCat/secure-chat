@@ -32,16 +32,21 @@ body {
 a {
     background-color: #888;
 }
+.note {
+    font-size: 12px;
+    font-family: Ariel;
+}
 </style>
 <body>
-<h1>secure chat</h1>
+<h1>Secure Chat</h1>
 <div>
 Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
 <br>
 <div>
-<input id='name' class='details' type='text' placeholder='enter a display name'>
-<input id='color'  class='details' type='text' placeholder='enter a display colour'>
+<input id='name'  class='details' type='text' placeholder='display name'>
+<input id='color' class='details' type='text' placeholder='display colour*'>
 <input id='details_but' value='submit' type='button'>
+<p class='note'>*all CSS colour strings accepted (e.g. 'blue','#00f','rgb(123,231,213)','hsl(123,45,67)')</p>
 <div id='demand'>you must enter your details before you can send messages</div>
 </div>
 <hr>
