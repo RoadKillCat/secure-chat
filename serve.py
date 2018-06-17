@@ -5,7 +5,7 @@ USERS = set() #set of WebSocketServerProtocol instances
 DATA = {
         'users': {},     #dict of dicts: {uid: {name:   their chosen name,
                          #                      online: is there a websocket open with their uid,
-                         #                      col:    their chosen colour}} 
+                         #                      color:  their chosen colour}}
         'posts': []   #list of posts as objects: {uid: content}
         }
 
