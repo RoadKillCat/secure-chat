@@ -5,5 +5,5 @@ secure chat
 
 ---
 
-Visit [here](to send a message).
+Visit [here](http://joeiddon.me/secure_chat) to send a message.
 *(warning, the ws server may not be running)*
