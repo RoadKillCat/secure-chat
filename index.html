@@ -25,7 +25,7 @@ body {
     margin: 8px;
     bottom: 0;
 }
-#demand {
+.attention {
     color: red;
     display: none;
 }
@@ -38,6 +38,11 @@ a {
 }
 </style>
 <body>
+<div id='auth_div'>
+<input id='auth_input' type='text' placeholder='passkey'>
+<div id='fail' class='attention'>authentication failed</div>
+</div>
+<div id='main' style='display:none'>
 <h1>Secure Chat</h1>
 <div>
 Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
@@ -47,14 +52,15 @@ Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='
 <input id='color' class='details' type='text' placeholder='display colour*'>
 <input id='details_but' value='submit' type='button'>
 <p class='note'>*all CSS colour strings accepted (e.g. 'blue','#00f','rgb(123,231,213)','hsl(123,45,67)')</p>
-<div id='demand'>you must enter your details before you can send messages</div>
+<div id='demand' class='attention'>you must enter your details before you can send messages</div>
 </div>
 <hr>
 <h4>users</h4>
 <div id='users'></div>
 <hr>
 <div id='out'></div>
-<input id='entry' type='text'>
+<input id='entry' type='text' placeholder='what have you got to say?'>
 <script src='script.js'></script>
+</div>
 </body>
 </html>

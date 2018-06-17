@@ -1,5 +1,9 @@
 'use strict';
 
+let main_div    = document.getElementById('main');
+let auth_div    = document.getElementById('auth_div');
+let auth_input  = document.getElementById('auth_input');
+let fail_div    = document.getElementById('fail');
 let message_div = document.getElementById('out');
 let users_div   = document.getElementById('users');
 let demand_div  = document.getElementById('demand');
@@ -18,15 +22,23 @@ let post_ind = 0;
 let websocket = new WebSocket(ws_server);
 
 websocket.onerror = function(e){
-    out.innerHTML = 'server error: likely server script is not running';
+    document.body.innerText = 'server error: likely server script is not running';
 }
 
 websocket.onmessage = function(e){
     let message = JSON.parse(e.data);
     switch (message['type']){
+        case 'authenticate':
+            if (message['data']){
+                auth_div.style.display = 'none';
+                main_div.style.display = 'block';
+            } else {
+                fail_div.style.display = 'block';
+            }
+            break;
         case 'whoami':
             my_uid = message['data'];
-            if (!Object.keys(users).length) console.log('sequencing err');
+            if (!users) console.log('sequencing err');
             name_input.value = users[my_uid].name;
             color_input.value  = users[my_uid].color;
             break;
@@ -64,13 +76,23 @@ function send_message(s){
         let message = {
             type: 'new_message',
             data: entry_input.value
-        }
+        };
+        websocket.send(JSON.stringify(message));
+    }
+}
+
+auth_input.onkeyup = function(e){
+    if (e.keyCode==13){
+        let message = {
+            type: 'authenticate',
+            data: auth_input.value
+        };
         websocket.send(JSON.stringify(message));
     }
 }
 
 entry_input.onkeyup = function(e){
-    if(e.keyCode==13){
+    if (e.keyCode==13){
         send_message(entry_input.value);
         entry_input.value='';
     }
