@@ -17,22 +17,22 @@ def get_uid(websocket):
     return ip
 
 def message_users_update():
-    return json.dumps({'type':'users_update', 'users': DATA['users']})
+    return json.dumps({'type':'users_update', 'data': DATA['users']})
 
 def message_posts_update():
-    return json.dumps({'type':'posts_update', 'posts': DATA['posts']})
+    return json.dumps({'type':'posts_update', 'data': DATA['posts']})
 
 def message_need_details():
     return json.dumps({'type':'need_details'})
 
 async def broadcast_posts():
     print('broadcasting_posts')
-    assert USERS
+    if not USERS: return
     await asyncio.wait([user.send(message_posts_update()) for user in USERS])
 
 async def broadcast_users():
     print('broadcasting_users')
-    assert USERS
+    if not USERS: return
     await asyncio.wait([user.send(message_users_update()) for user in USERS])
 
 def update_details(uid,details):
@@ -42,7 +42,7 @@ async def handle_join(websocket):
     USERS.add(websocket)
     uid = get_uid(websocket)
     print(uid,'joined')
-    if not any(uid == user['uid'] for user in DATA['users']):
+    if not uid in DATA['users']:
         await websocket.send(message_need_details())
         message = json.loads(await websocket.recv())
         assert message['type'] == 'update_details'
@@ -57,9 +57,14 @@ async def handle_leave(websocket):
     DATA['users'][uid]['online']=0
     await broadcast_users()
 
+async def send_uid(websocket):
+    uid = get_uid(websocket)
+    await websocket.send(json.dumps({'type':'whoami','data':uid}))
+
 async def handle_ws(websocket,path):
     uid = get_uid(websocket)
     await handle_join(websocket)
+    await send_uid(websocket)
     try:
         async for message in websocket:
             message = json.loads(message)
