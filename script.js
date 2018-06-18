@@ -5,7 +5,7 @@ let main_div    = document.getElementById('main');
 let auth_div    = document.getElementById('auth_div');
 let auth_input  = document.getElementById('auth_input');
 let fail_div    = document.getElementById('fail');
-let message_div = document.getElementById('out');
+let posts_div   = document.getElementById('posts');
 let users_div   = document.getElementById('users');
 let demand_div  = document.getElementById('demand');
 let details_but = document.getElementById('details_but');
@@ -20,7 +20,7 @@ let ws_server = 'ws://35.207.51.171:8000/';
 let known_user = 1; //assuming has logged on before
 let my_uid;
 let users;
-let posts;
+let posts=[];
 let post_ind = 0;
 
 
@@ -118,16 +118,23 @@ function display_users(){
         el.innerText = (users[uid]['online']?'\u2713':'\u2717')+users[uid]['name'];
         users_div.appendChild(el);
     }
+    //re-draw all posts as colours may have changed
+    while (posts_div.firstChild)
+    posts_div.removeChild(posts_div.firstChild);
+    for (let i=0;i<posts.length;i++){
+        let el = document.createElement('div');
+        el.style.color = users[posts[i]['uid']]['color'];
+        el.innerText = posts[i]['content'];
+        posts_div.appendChild(el);
+    }
 }
 
 function display_posts(){
     for (;post_ind<posts.length;post_ind++){
-        let post = posts[post_ind];
-        let uid = post['uid'];
         let el = document.createElement('div');
-        el.style.color = users[uid]['color'];
-        el.innerText = post['content'];
-        out.appendChild(el);
+        el.style.color = users[posts[post_ind]['uid']]['color'];
+        el.innerText = posts[post_ind]['content'];
+        posts_div.appendChild(el);
     }
     if (post_ind) document.title = posts[post_ind-1]['content'];
     document.body.scrollTop = document.body.scrollHeight;
