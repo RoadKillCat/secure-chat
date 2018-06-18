@@ -107,7 +107,10 @@ entry_input.onkeyup = function(e){
     }
 }
 
-color_input.oninput = e=> color_input.style.color=color_input.value;
+color_input.onkeyup = function(e){
+    color_input.style.color = color_input.value;
+    if (e.keyCode==13) details_but.click();
+}
 
 function display_users(){
     while (users_div.firstChild)
