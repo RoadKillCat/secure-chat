@@ -10,7 +10,7 @@ let demand_div  = document.getElementById('demand');
 let details_but = document.getElementById('details_but');
 let entry_input = document.getElementById('entry');
 let name_input  = document.getElementById('name');
-let color_input   = document.getElementById('color');
+let color_input = document.getElementById('color');
 
 let ws_server = 'ws://35.207.51.171:8000/';
 let known_user = 1; //assuming has logged on before
@@ -18,6 +18,10 @@ let my_uid;
 let users;
 let posts;
 let post_ind = 0;
+
+////////
+let inputs = document.getElementsByTagName('input');
+for (let i=0;i<inputs.length;i++) inputs[i].setAttribute('autocapitalize','off');
 
 let websocket = new WebSocket(ws_server);
 
@@ -120,6 +124,6 @@ function display_posts(){
         el.innerText = post['content'];
         out.appendChild(el);
     }
-    document.title = posts[post_ind-1]['content'];
+    if (post_ind) document.title = posts[post_ind-1]['content'];
     document.body.scrollTop = document.body.scrollHeight;
 }
