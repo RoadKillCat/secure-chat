@@ -12,7 +12,6 @@ DATA = {
 PASSKEY = '02edbb53017ded13c286e27d14285cb82f5a87f6dcbae280d6c53b5d98477bb7'
 
 def get_uid(websocket):
-    'identifies the user'
     ip,port = websocket.remote_address
     #return hashlib.sha1(ip.endcode('utf-8'))[:5]
     return ip
@@ -41,43 +40,38 @@ def update_details(uid,details):
 
 async def handle_join(websocket):
     USERS.add(websocket)
-    uid = get_uid(websocket)
-    print(uid,'joined')
-    if not uid in DATA['users']:
+    print(websocket.uid,'joined')
+    if not websocket.uid in DATA['users']:
         await websocket.send(message_need_details())
         message = json.loads(await websocket.recv())
         assert message['type'] == 'update_details'
-        update_details(uid,message['data'])
-    DATA['users'][uid]['online']=1
+        update_details(websocket.uid,message['data'])
+    DATA['users'][websocket.uid]['online']=1
     await broadcast_users()
 
 async def handle_leave(websocket):
+    print(websocket.uid,'left')
     USERS.remove(websocket)
-    uid = get_uid(websocket)
-    print(uid,'left')
-    DATA['users'][uid]['online']=0
+    DATA['users'][websocket.uid]['online']=0
     await broadcast_users()
 
 async def send_uid(websocket):
-    uid = get_uid(websocket)
-    await websocket.send(json.dumps({'type':'whoami','data':uid}))
+    await websocket.send(json.dumps({'type':'whoami','data':websocket.uid}))
 
 async def authenticate(websocket):
     message = json.loads(await websocket.recv())
     assert message['type'] == 'authenticate'
-    guess = hashlib.sha256(message['data'].encode('utf-8')).hexdigest()
-    success = guess == PASSKEY
-    print(success)
+    success = hashlib.sha256(message['data'].encode('utf-8')).hexdigest() == PASSKEY
+    print(websocket.uid,'passed' if success else 'failed ('+message['data']+')','authetication')
     await websocket.send(json.dumps({'type':'authenticate','data':success}))
     return success
 
 async def handle_ws(websocket,path):
-    uid = get_uid(websocket)
-    print(uid,'connected')
+    websocket.uid = get_uid(websocket)
+    print(websocket.uid,'connected')
     if not await authenticate(websocket):
         await websocket.close()
         return
-    print(uid,'autheticated')
     await handle_join(websocket)
     await send_uid(websocket)
     await websocket.send(message_posts_update())
@@ -85,13 +79,13 @@ async def handle_ws(websocket,path):
         async for message in websocket:
             message = json.loads(message)
             if message['type'] == 'update_details':
-                update_details(uid,message['data'])
+                update_details(websocket.uid,message['data'])
                 await broadcast_users()
             elif message['type'] == 'new_message':
-                DATA['posts'].append({'uid':uid,'content':message['data']})
+                DATA['posts'].append({'uid':websocket.uid,'content':message['data']})
                 await broadcast_posts()
     finally:
-        await handle_leave(websocket)
+        await handle_leave(websocket,websocket.uid)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websockets.serve(handle_ws,port=8000))
