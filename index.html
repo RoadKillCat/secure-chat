@@ -1,66 +1,31 @@
 <html>
-<style>
-body {
-    background-color: #000;
-    color: #fff;
-}
-.details {
-    background-color: #000;
-    color: #fff;
-    outline: none;
-}
-#details_but {
-    background-color: #000;
-    color: #fff;
-}
-#out {
-    margin-bottom: 80px;
-    border-left: 1px solid #fff;
-    padding-left: 5px;
-}
-#entry {
-    position: fixed;
-    width: 50%;
-    padding: 5px;
-    margin: 8px;
-    bottom: 0;
-}
-.attention {
-    color: red;
-    display: none;
-}
-a {
-    background-color: #888;
-}
-.note {
-    font-size: 12px;
-    font-family: Ariel;
-}
-</style>
+<head>
+<link id='stylesheet' rel='stylesheet'>
+</head>
 <body>
+
 <div id='auth_div'>
-<input id='auth_input' type='text' placeholder='passkey'>
-<div id='fail' class='attention'>authentication failed</div>
+ <input id='auth_input' type='text' placeholder='passkey'>
+ <div id='fail' class='attention'>authentication failed</div>
 </div>
 <div id='main' style='display:none'>
-<h1>Secure Chat</h1>
-<div>
-Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
-<br>
-<div>
-<input id='name'  class='details' type='text' placeholder='display name'>
-<input id='color' class='details' type='text' placeholder='display colour*'>
-<input id='details_but' value='submit' type='button'>
-<p class='note'>*all CSS colour strings accepted (e.g. 'blue','#00f','rgb(123,231,213)','hsl(123,45,67)')</p>
-<div id='demand' class='attention'>you must enter your details before you can send messages</div>
+ <h1>Secure Chat</h1>
+ <div>Uses <a href='https://en.wikipedia.org/wiki/WebSocket'>WebSockets</a> (<a href='https://websockets.readthedocs.io/en/stable/api.html'>Python (server)</a>, <a href='https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API'>JS (client)</a>)  to send messages between clients.</div>
+ <br>
+ <div>
+  <input id='name'  class='details' type='text' placeholder='display name'>
+  <input id='color' class='details' type='text' placeholder='display colour*'>
+  <input id='details_but' value='submit' type='button'>
+  <p class='note'>*all CSS colour strings accepted (e.g. 'blue','#00f','rgb(123,231,213)','hsl(123,45,67)')</p>
+  <div id='demand' class='attention'>you must enter your details before you can send messages</div>
+ </div>
+ <hr>
+ <h4>users</h4>
+ <div id='users'></div>
+ <hr>
+ <div id='out'></div>
+ <input id='entry' type='text' placeholder='what have you got to say?'>
 </div>
-<hr>
-<h4>users</h4>
-<div id='users'></div>
-<hr>
-<div id='out'></div>
-<input id='entry' type='text' placeholder='what have you got to say?'>
 <script src='script.js'></script>
-</div>
 </body>
 </html>

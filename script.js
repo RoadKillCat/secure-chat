@@ -1,5 +1,6 @@
 'use strict';
 
+let stylesheet  = document.getElementById('stylesheet');
 let main_div    = document.getElementById('main');
 let auth_div    = document.getElementById('auth_div');
 let auth_input  = document.getElementById('auth_input');
@@ -12,12 +13,16 @@ let entry_input = document.getElementById('entry');
 let name_input  = document.getElementById('name');
 let color_input = document.getElementById('color');
 
+let is_mobile = /android|iphone|ipad/i.test(navigator.userAgent);
+stylesheet.href = is_mobile ? 'mobile.css' : 'desktop.css';
+
 let ws_server = 'ws://35.207.51.171:8000/';
 let known_user = 1; //assuming has logged on before
 let my_uid;
 let users;
 let posts;
 let post_ind = 0;
+
 
 ////////
 let inputs = document.getElementsByTagName('input');
