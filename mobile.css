@@ -1,6 +1,8 @@
 body {
     background-color: #000;
     color: #fff;
+    margin: 0;
+    font-size: 12px;i
 }
 .details {
     background-color: #000;
@@ -18,10 +20,10 @@ body {
 }
 #entry {
     position: fixed;
-    width: 50%;
-    padding: 5px;
-    margin: 8px;
     bottom: 0;
+    width: 100%;
+    padding: 5px;
+    height: 32px;
 }
 .attention {
     color: red;
@@ -31,6 +33,6 @@ a {
     background-color: #888;
 }
 .note {
-    font-size: 12px;
+    font-size: 8px;
     font-family: Ariel;
 }
