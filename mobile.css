@@ -8,6 +8,7 @@ body {
     background-color: #000;
     color: #fff;
     outline: none;
+    margin: 4px;
 }
 #details_but {
     background-color: #000;
