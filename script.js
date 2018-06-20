@@ -41,6 +41,7 @@ websocket.onmessage = function(e){
             if (message['data']){
                 auth_div.style.display = 'none';
                 main_div.style.display = 'block';
+                entry_input.focus();
             } else {
                 fail_div.style.display = 'block';
             }
@@ -50,6 +51,7 @@ websocket.onmessage = function(e){
             if (!users) console.log('sequencing err');
             name_input.value = users[my_uid].name;
             color_input.value  = users[my_uid].color;
+            color_input.style.color = color_input.value;
             break;
         case 'need_details':
             known_user = 0;
@@ -76,6 +78,7 @@ details_but.onclick = function(){
     websocket.send(JSON.stringify(message));
     known_user = 1;
     demand_div.style.display = 'none';
+    entry_input.focus();
 }
 
 function send_message(s){
