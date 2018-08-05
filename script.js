@@ -62,6 +62,7 @@ websocket.onmessage = function(e){
             break;
         case 'posts_update':
             posts = message['data'];
+            new Audio('tone.mp3').play();
             display_posts();
             break;
         default:
