@@ -39,15 +39,19 @@ def update_details(uid,details):
     DATA['users'].setdefault(uid,{}).update(details)
 
 async def handle_join(websocket):
-    USERS.add(websocket)
     print(websocket.uid,'joined')
     if not websocket.uid in DATA['users']:
         await websocket.send(message_need_details())
-        message = json.loads(await websocket.recv())
+        try:
+            message = json.loads(await websocket.recv())
+        except websockets.exceptions.ConnectionClosed:
+            return False
         assert message['type'] == 'update_details'
         update_details(websocket.uid,message['data'])
+    USERS.add(websocket)
     DATA['users'][websocket.uid]['online']=1
     await broadcast_users()
+    return True
 
 async def handle_leave(websocket):
     print(websocket.uid,'left')
@@ -67,14 +71,17 @@ async def authenticate(websocket):
     return success
 
 async def handle_ws(websocket,path):
-    websocket.uid = get_uid(websocket)
-    print(websocket.uid,'connected')
-    if not await authenticate(websocket):
-        await websocket.close()
-        return
-    await handle_join(websocket)
-    await send_uid(websocket)
-    await websocket.send(message_posts_update())
+    try:
+        websocket.uid = get_uid(websocket)
+        print(websocket.uid,'connected')
+        if not await authenticate(websocket):
+            await websocket.close()
+            return
+        if not await handle_join(websocket): return
+        await send_uid(websocket)
+        await websocket.send(message_posts_update())
+    except:
+        print('caught something')
     try:
         async for message in websocket:
             message = json.loads(message)
@@ -85,7 +92,7 @@ async def handle_ws(websocket,path):
                 DATA['posts'].append({'uid':websocket.uid,'content':message['data']})
                 await broadcast_posts()
     finally:
-        await handle_leave(websocket,websocket.uid)
+        await handle_leave(websocket)
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websockets.serve(handle_ws,port=8000))
