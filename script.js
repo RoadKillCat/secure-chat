@@ -1,23 +1,32 @@
 'use strict';
 
+let stylesheet  = document.getElementById('stylesheet');
 let main_div    = document.getElementById('main');
 let auth_div    = document.getElementById('auth_div');
 let auth_input  = document.getElementById('auth_input');
 let fail_div    = document.getElementById('fail');
-let message_div = document.getElementById('out');
+let posts_div   = document.getElementById('posts');
 let users_div   = document.getElementById('users');
 let demand_div  = document.getElementById('demand');
 let details_but = document.getElementById('details_but');
 let entry_input = document.getElementById('entry');
 let name_input  = document.getElementById('name');
-let color_input   = document.getElementById('color');
+let color_input = document.getElementById('color');
+
+let is_mobile = /android|iphone|ipad/i.test(navigator.userAgent);
+stylesheet.href = is_mobile ? 'mobile.css' : 'desktop.css';
 
 let ws_server = 'ws://35.207.51.171:8000/';
 let known_user = 1; //assuming has logged on before
 let my_uid;
 let users;
-let posts;
+let posts=[];
 let post_ind = 0;
+
+
+////////
+let inputs = document.getElementsByTagName('input');
+for (let i=0;i<inputs.length;i++) inputs[i].setAttribute('autocapitalize','off');
 
 let websocket = new WebSocket(ws_server);
 
@@ -32,6 +41,7 @@ websocket.onmessage = function(e){
             if (message['data']){
                 auth_div.style.display = 'none';
                 main_div.style.display = 'block';
+                entry_input.focus();
             } else {
                 fail_div.style.display = 'block';
             }
@@ -41,6 +51,7 @@ websocket.onmessage = function(e){
             if (!users) console.log('sequencing err');
             name_input.value = users[my_uid].name;
             color_input.value  = users[my_uid].color;
+            color_input.style.color = color_input.value;
             break;
         case 'need_details':
             known_user = 0;
@@ -67,6 +78,7 @@ details_but.onclick = function(){
     websocket.send(JSON.stringify(message));
     known_user = 1;
     demand_div.style.display = 'none';
+    entry_input.focus();
 }
 
 function send_message(s){
@@ -98,7 +110,10 @@ entry_input.onkeyup = function(e){
     }
 }
 
-color_input.oninput = e=> color_input.style.color=color_input.value;
+color_input.onkeyup = function(e){
+    color_input.style.color = color_input.value;
+    if (e.keyCode==13) details_but.click();
+}
 
 function display_users(){
     while (users_div.firstChild)
@@ -109,17 +124,24 @@ function display_users(){
         el.innerText = (users[uid]['online']?'\u2713':'\u2717')+users[uid]['name'];
         users_div.appendChild(el);
     }
+    //re-draw all posts as colours may have changed
+    while (posts_div.firstChild)
+    posts_div.removeChild(posts_div.firstChild);
+    for (let i=0;i<posts.length;i++){
+        let el = document.createElement('div');
+        el.style.color = users[posts[i]['uid']]['color'];
+        el.innerText = posts[i]['content'];
+        posts_div.appendChild(el);
+    }
 }
 
 function display_posts(){
     for (;post_ind<posts.length;post_ind++){
-        let post = posts[post_ind];
-        let uid = post['uid'];
         let el = document.createElement('div');
-        el.style.color = users[uid]['color'];
-        el.innerText = post['content'];
-        out.appendChild(el);
+        el.style.color = users[posts[post_ind]['uid']]['color'];
+        el.innerText = posts[post_ind]['content'];
+        posts_div.appendChild(el);
     }
-    document.title = posts[post_ind-1]['content'];
+    if (post_ind) document.title = posts[post_ind-1]['content'];
     document.body.scrollTop = document.body.scrollHeight;
 }

@@ -1,0 +1,39 @@
+body {
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    font-size: 12px;i
+}
+.details {
+    background-color: #000;
+    color: #fff;
+    outline: none;
+    margin: 4px;
+}
+#details_but {
+    background-color: #000;
+    color: #fff;
+}
+#posts {
+    margin-bottom: 45px;
+    border-left: 1px solid #fff;
+    padding-left: 5px;
+}
+#entry {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+    height: 32px;
+}
+.attention {
+    color: red;
+    display: none;
+}
+a {
+    background-color: #888;
+}
+.note {
+    font-size: 8px;
+    font-family: Ariel;
+}
