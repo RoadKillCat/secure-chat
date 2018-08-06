@@ -1,7 +1,9 @@
+#! /usr/bin/python3.6
 import http.server, os, socketserver
 
 PORT = 80
 
+os.chdir('/home/joe/secure_chat')
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         #get all files

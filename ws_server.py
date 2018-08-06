@@ -1,3 +1,4 @@
+#! /usr/bin/python3.6
 import asyncio,websockets,json,hashlib
 
 USERS = set() #set of WebSocketServerProtocol instances

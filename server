@@ -1,0 +1,31 @@
+#! /bin/bash
+
+if [ $EUID -ne 0 ]
+    then echo "run as root"
+    exit
+fi
+
+DAEMON_DIR="/etc/systemd/system/"
+
+case $1 in
+    setup) # <-- move this to a seperate `setup.sh` file
+        echo "copying daemon files to $DAEMON_DIR"
+        sudo cp *.service $DAEMON_DIR
+        echo "ready"
+        #/usr/local/bin
+        ;;
+    start)
+        sudo systemctl start ws_server
+        sudo systemctl start html_server
+        ;;
+    stop)
+        sudo systemctl stop ws_server
+        sudo systemctl stop html_server
+        ;;
+    status)
+        sudo systemctl status ws_server
+        sudo systemctl status html_server
+        ;;
+    *)
+        echo "Usage: $0 {setup|start|stop|status}"
+esac

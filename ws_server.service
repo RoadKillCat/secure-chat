@@ -1,0 +1,5 @@
+[Unit]
+Description=websocket server
+
+[Service]
+ExecStart=/home/joe/secure_chat/ws_server.py
