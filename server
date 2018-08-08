@@ -8,12 +8,6 @@ fi
 DAEMON_DIR="/etc/systemd/system/"
 
 case $1 in
-    setup) # <-- move this to a seperate `setup.sh` file
-        echo "copying daemon files to $DAEMON_DIR"
-        sudo cp *.service $DAEMON_DIR
-        echo "ready"
-        #/usr/local/bin
-        ;;
     start)
         sudo systemctl start ws_server
         sudo systemctl start html_server
@@ -27,5 +21,5 @@ case $1 in
         sudo systemctl status html_server
         ;;
     *)
-        echo "Usage: $0 {setup|start|stop|status}"
+        echo "Usage: $0 {setup|start|stop}"
 esac
