@@ -32,14 +32,14 @@ sudo ./uninstall.sh
 To start the server, run:
 
 ```shell
-server start
+chat_server start
 ```
 and then visit the server's IP address to use the chat app.
 
 To see the status of the html and websocket servers, use
 
 ```shell
-server status
+chat_server status
 ```
 
 which merely echoes the calls to `systemctl status`.
@@ -47,5 +47,5 @@ which merely echoes the calls to `systemctl status`.
 To stop the server, run:
 
 ```shell
-server stop
+chat_server stop
 ```
