@@ -1,5 +1,0 @@
-[Unit]
-Description=html server
-
-[Service]
-ExecStart=/home/joe/secure_chat/html_server.py
