@@ -3,49 +3,10 @@ secure chat
 
 #### A simple chat webapp using WebSockets
 
----
+This was just a simple project to test the capabilities of websockets (and their secure `wss` counterparts).
 
-### Installation
+Prior to using websockets, I was using basic HTTP requests. I tried two methods: having the client poll the server for new messages (which was bad since that's a lot of unnecessary network traffic) and hanging GET requets (where the user asks for the next new message and the server doesn't repsond until it recieves a new message from a different client). Both these methods were inferior to the beauty of websockets which allow for full duplex communication with really small latency (~20ms on my machine).
 
-To host yourself:
+Get some friends (since its unlikely I'll have it open when your reading this) and go to https://joeiddon.github.io/secure_chat to try it out.
 
- - clone this repo
- - navigate to it
- - install with
-
-```shell
-sudo ./install.sh
-```
-
-and uninstalling is as simple as:
-
-```shell
-sudo ./uninstall.sh
-```
-
----
-
-### Usage
-
-*All server commands must be made with super user privileges (either prefix with `sudo` or run `sudo su` first to switch to root).*
-
-To start the server, run:
-
-```shell
-chat_server start
-```
-and then visit the server's IP address to use the chat app.
-
-To see the status of the html and websocket servers, use
-
-```shell
-chat_server status
-```
-
-which merely echoes the calls to `systemctl status`.
-
-To stop the server, run:
-
-```shell
-chat_server stop
-```
+The websocket server code and client HTML script is available in this repo, and if you view the commit history, you can look back to the older HTTP request code if you are interested (beware, my commit messages are unhelpful and the code is pretty hacky back there!).

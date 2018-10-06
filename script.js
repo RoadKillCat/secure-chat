@@ -25,6 +25,7 @@ let post_ind = 0;
 
 
 ////////
+
 let inputs = document.getElementsByTagName('input');
 for (let i=0;i<inputs.length;i++) inputs[i].setAttribute('autocapitalize','off');
 
