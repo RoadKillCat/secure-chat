@@ -100,5 +100,4 @@ ssl_context.load_cert_chain(certfile='/etc/letsencrypt/live/joe.iddon.com/fullch
                             keyfile ='/etc/letsencrypt/live/joe.iddon.com/privkey.pem')
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websockets.serve(handle_ws,port=443,ssl=ssl_context))
-loop.run_until_complete(task)
 loop.run_forever()
