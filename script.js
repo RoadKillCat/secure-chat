@@ -16,7 +16,7 @@ let color_input = document.getElementById('color');
 let is_mobile = /android|iphone|ipad/i.test(navigator.userAgent);
 stylesheet.href = is_mobile ? 'mobile.css' : 'desktop.css';
 
-let ws_server = 'ws://35.207.51.171:8000/';
+let ws_server = 'wss://joe.iddon.com:443/';
 let known_user = 1; //assuming has logged on before
 let my_uid;
 let users;
